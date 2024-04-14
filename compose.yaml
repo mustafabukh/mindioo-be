@@ -2,16 +2,16 @@ version: '3.9'
 
 services:
 
-  backend:
-    container_name: backend
-    image: backend
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    environment:
-      - DATABASE_URL="postgresql://mindiooU:mindiooP@localhost:5432/mindiooDB?schema=public"
+  # backend:
+  #   container_name: backend
+  #   image: backend
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - DATABASE_URL="postgresql://mindiooU:mindiooP@localhost:5432/mindiooDB?schema=public"
 
   db:
     container_name: db
