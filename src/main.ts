@@ -9,11 +9,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   // TODO == input validation after finalizing 
   // TODO == Error handling == https://nestjs-prisma.dev/docs/basic-usage/
+  // TODO == Hashing passowrds
   const config = new DocumentBuilder()
 
   .setTitle('Mindioo')
   .setDescription('Mindioo APIs')
   .setVersion('0.1')
+  .addBearerAuth()
   .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
