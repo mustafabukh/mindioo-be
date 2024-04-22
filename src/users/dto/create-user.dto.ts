@@ -6,21 +6,31 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  IsEmail,
 
 } from 'class-validator'
 
 export class CreateUserDto {
-  // TODO == validations
   // TODO == Error handling == https://nestjs-prisma.dev/docs/basic-usage/
-  
+
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
   email: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(3)
   name: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(12)
   password: string;
+
 
   // @ApiProperty()
   // userType: string;
