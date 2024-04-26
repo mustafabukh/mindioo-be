@@ -14,7 +14,67 @@ datasource db {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  email   String  @unique
-  name    String?
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String
+  password String
+  userType UserType @default(VENDOR)
+  profile  Profile?
+  posts    Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model Profile {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender       Gender?
+  firstName    String
+  lastName     String
+  bio          String
+  birthdate    DateTime?
+  address      Address?
+  socialMedia  Links?
+  coverPhoto   String?
+  profilePhoto String?
+}
+
+model Links {
+  id        Int     @id @default(autoincrement())
+  facebook  String?
+  youtube   String?
+  twitter   String?
+  instagram String?
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int  @unique 
+}
+
+model Address {
+  id         Int     @id @default(autoincrement())
+  street     String?
+  city       String?
+  state      String?
+  country    String?
+  postalCode String?
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int  @unique 
+}
+
+enum UserType {
+  ADMIN
+  CUSTOMER
+  VENDOR
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
