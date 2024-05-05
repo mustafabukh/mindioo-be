@@ -20,12 +20,14 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserType } from '@prisma/client';
 import { RolesGuard } from 'src/auth/role.guard';
+import { versions } from 'src/utils/versioning'
+
 
 @Controller({
-  version: '1',
+  version: versions.V1,
   path: 'users',
 })
-@ApiTags('users')
+@ApiTags(`users`)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -36,10 +38,10 @@ export class UsersController {
   }
 
   @Get()
-  // @UseGuards(RolesGuard)
-  // @Roles(UserType.ADMIN)
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(UserType.ADMIN)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   findAll() {
     return this.usersService.findAll();
   }

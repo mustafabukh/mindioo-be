@@ -2,11 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { versions } from 'src/utils/versioning';
 
 @Controller({
   version: '1',
   path: 'profiles',
 })
+@ApiTags(`profiles`)
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 

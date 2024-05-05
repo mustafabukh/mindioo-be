@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { UserType } from "@prisma/client";
 import {
   IsBoolean,
   IsNotEmpty,
@@ -31,7 +32,7 @@ export class CreateUserDto {
   @MinLength(12)
   password: string;
 
-
-  // @ApiProperty()
-  // userType: string;
+  @ApiProperty()
+  userType: UserType;
+  
 }

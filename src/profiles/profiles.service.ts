@@ -16,11 +16,11 @@ export class ProfilesService {
     return profile
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.profile.findMany();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.profile.findUnique({ where: { id } });
   }
 
@@ -31,7 +31,7 @@ export class ProfilesService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.prisma.profile.delete({ where: { id } });
   }
 }

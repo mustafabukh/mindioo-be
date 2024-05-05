@@ -18,21 +18,23 @@ async function bootstrap() {
     }),
   )
   
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
 
   .setTitle('Mindioo')
   .setDescription('Mindioo APIs')
   .setVersion('0.1')
+  .addTag('v1')
   .addBearerAuth()
   .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
   
   await app.listen(3000);
 }
