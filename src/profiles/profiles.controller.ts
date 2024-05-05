@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { CreateFullProfileDto } from './dto/create-profile.dto';
+import { UpdateFullProfileDto } from './dto/update-profile.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { versions } from 'src/utils/versioning';
 
 @Controller({
-  version: '1',
+  version: versions.V1,
   path: 'profiles',
 })
 @ApiTags(`profiles`)
@@ -14,8 +14,8 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  create(@Body() createProfileDto: CreateProfileDto) {
-    return this.profilesService.create(createProfileDto);
+  create(@Body() profileDto: CreateFullProfileDto) {
+    return this.profilesService.create(profileDto);
   }
 
   @Get()
@@ -23,18 +23,25 @@ export class ProfilesController {
     return this.profilesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(':userId')
+  findOne(@Param('userId') id: string) {
     return this.profilesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profilesService.update(+id, updateProfileDto);
+  @Patch()
+  update(
+    @Body() updateFullProfileDto: UpdateFullProfileDto,
+    @Req() request: any
+    ) {
+      const userId = request.user.id;
+      return this.profilesService.update(userId, updateFullProfileDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profilesService.remove(+id);
+  @Delete()
+  remove(
+    @Req() request: any
+  ) {
+    const userId = request.user.id;
+    return this.profilesService.remove(userId);
   }
 }

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { isDate,IsDateString,isDateString,IsOptional, IsString, MinLength } from 'class-validator';
 import { Gender, User } from '@prisma/client'; // Import UserType from Prisma
 
-class AddressDto {
+export class AddressDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -29,7 +29,7 @@ class AddressDto {
   postalCode?: string;
 }
 
-class LinksDto {
+export class SocialMediaDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
@@ -51,12 +51,9 @@ class LinksDto {
   instagram?: string;
 }
 
-export class CreateProfileDto {
+export class BasicProfileDto {
   @ApiProperty()
   userId: number;
-
-  // @ApiProperty()
-  // user: User;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -91,12 +88,18 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsOptional()
   gender?: Gender; 
+}
 
-  // @ApiProperty()
-  // @IsOptional()
-  // address?: AddressDto; // Address DTO
+export class CreateFullProfileDto {
+  @ApiProperty()
+  @IsOptional()
+  basicProfileDto: BasicProfileDto
 
-  // @ApiProperty()
-  // @IsOptional()
-  // socialMedia?: LinksDto; // Links DTO 
+  @ApiProperty()
+  @IsOptional()
+  address?: AddressDto; // Address DTO
+
+  @ApiProperty()
+  @IsOptional()
+  socialMedia?: SocialMediaDto; // Links DTO 
 }

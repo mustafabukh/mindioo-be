@@ -8,6 +8,7 @@ import { Controller,
          UseGuards, 
          ParseIntPipe,
          NotFoundException,
+         Req,
         } from '@nestjs/common';
 
 
@@ -21,7 +22,6 @@ import { Roles } from 'src/auth/roles.decorator';
 import { UserType } from '@prisma/client';
 import { RolesGuard } from 'src/auth/role.guard';
 import { versions } from 'src/utils/versioning'
-
 
 @Controller({
   version: versions.V1,
@@ -61,17 +61,25 @@ export class UsersController {
     return user;
   }
 
-  @Patch(':id')
+  @Patch()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  update(
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() request: any
+    ) {
+    console.log(request)
+    const userId = request.user.id;
+    return this.usersService.update(userId, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(id);
+  remove(
+    @Req() request: any
+    ) {
+    const userId = request.user.id;
+    return this.usersService.remove(userId);
   }
 }

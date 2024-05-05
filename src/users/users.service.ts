@@ -34,14 +34,6 @@ export class UsersService {
     // TODO ADD ADDRESS FIELDS
     // WITH EMPTY OR DEFAULT VALUES
 
-    // if (!user) {
-    //   await this.profilesService.create({
-    //     userId: user.id,
-    //     firstName: '', 
-    //     lastName: '',
-    //   });
-    // }
-
     return user
   }
 
@@ -68,6 +60,7 @@ export class UsersService {
   }
 
   remove(id: number) {
+    this.prisma.profile.delete({ where: { id } });
     return this.prisma.user.delete({ where: { id } });
   }
 }
