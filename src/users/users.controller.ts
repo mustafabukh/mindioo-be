@@ -17,6 +17,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { UserType } from '@prisma/client';
+import { RolesGuard } from 'src/auth/role.guard';
 
 @Controller('users')
 @ApiTags('users')
@@ -30,6 +33,8 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @Roles(UserType.ADMIN)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   findAll() {
@@ -37,6 +42,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.ADMIN)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async findOne(@Param('id', ParseIntPipe) id: number) {
