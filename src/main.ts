@@ -1,7 +1,7 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe, VersioningType } from '@nestjs/common';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 async function bootstrap() {
@@ -28,6 +28,11 @@ async function bootstrap() {
   .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+  
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
   
   await app.listen(3000);
 }

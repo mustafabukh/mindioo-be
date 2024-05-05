@@ -21,7 +21,10 @@ import { Roles } from 'src/auth/roles.decorator';
 import { UserType } from '@prisma/client';
 import { RolesGuard } from 'src/auth/role.guard';
 
-@Controller('users')
+@Controller({
+  version: '1',
+  path: 'users',
+})
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -33,10 +36,10 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(RolesGuard)
-  @Roles(UserType.ADMIN)
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(RolesGuard)
+  // @Roles(UserType.ADMIN)
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   findAll() {
     return this.usersService.findAll();
   }
