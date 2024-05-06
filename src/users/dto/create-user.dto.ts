@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserType } from "@prisma/client";
+import { UserType, VendorCategory } from "@prisma/client";
 import {
   IsBoolean,
   IsNotEmpty,
@@ -35,4 +35,7 @@ export class CreateUserDto {
   @ApiProperty()
   userType: UserType;
   
+
+  @ApiProperty()
+  categories: VendorCategory[];
 }

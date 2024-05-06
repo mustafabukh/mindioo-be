@@ -8,10 +8,12 @@ import { Profile } from '@prisma/client';
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
   
-  async create(profileDto: CreateFullProfileDto) {
+  async create(profileDto: CreateFullProfileDto, userId: number) {
     const socialMediaDto = profileDto.socialMedia
     const addressDto = profileDto.address
     const basicProfileDto = profileDto.basicProfileDto
+
+    basicProfileDto.userId = userId
 
     const profile = await this.prisma.profile.create({
       data:basicProfileDto,
@@ -50,11 +52,13 @@ export class ProfilesService {
     let profile = await this.prisma.profile.findUnique({
       where:{userId:id}
     })
+    const profileId = profile.id
     if(!profile){
       return NaN
       // TODO RAISE EXCEPTOION 404 ERROR CODE AND SO ON
     }
-
+    console.log(profile)
+    console.log(basicProfileDto)
     if(basicProfileDto){
       profile = await this.prisma.profile.update({
         where: { userId: id },
@@ -64,14 +68,14 @@ export class ProfilesService {
 
     if(socialMediaDto){
       const socialMedia = await this.prisma.links.update({
-        where:{profileId:id},
+        where:{profileId: profileId},
         data:{profileId:profile.id, ...socialMediaDto}
       });
     }
 
     if(addressDto){
       const address = await this.prisma.address.update({
-        where:{profileId: id},
+        where:{profileId: profileId},
         data:{profileId:profile.id, ...addressDto},
       });
     }
