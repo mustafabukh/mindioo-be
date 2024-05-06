@@ -1,7 +1,7 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe, VersioningType } from '@nestjs/common';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 async function bootstrap() {
@@ -18,12 +18,18 @@ async function bootstrap() {
     }),
   )
   
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
 
   .setTitle('Mindioo')
   .setDescription('Mindioo APIs')
   .setVersion('0.1')
+  .addTag('v1')
   .addBearerAuth()
   .build();
   const document = SwaggerModule.createDocument(app, config);

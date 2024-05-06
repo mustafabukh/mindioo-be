@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ProfilesService } from 'src/profiles/profiles.service';
 
 import * as bcrypt from 'bcrypt';
 export const roundsOfHashing = 8;
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+              private readonly prisma: PrismaService,
+              private readonly profilesService: ProfilesService,
+              ) {}
 
   
   async create(createUserDto: CreateUserDto) {
@@ -16,13 +20,21 @@ export class UsersService {
     createUserDto.password,
     roundsOfHashing,
     );
-
+    
     createUserDto.password = hashedPassword;
 
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
     data: createUserDto,
     });
 
+    console.log(user);
+
+    // TODO ADD PROFILE
+    // TODO ADD SOCIALMEDIA LINKS
+    // TODO ADD ADDRESS FIELDS
+    // WITH EMPTY OR DEFAULT VALUES
+
+    return user
   }
 
   findAll() {
@@ -48,7 +60,7 @@ export class UsersService {
   }
 
   remove(id: number) {
-    // TODO == auth
+    this.prisma.profile.delete({ where: { id } });
     return this.prisma.user.delete({ where: { id } });
   }
 }

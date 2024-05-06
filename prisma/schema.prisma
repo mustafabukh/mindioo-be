@@ -53,7 +53,7 @@ model Links {
   youtube   String?
   twitter   String?
   instagram String?
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int  @unique 
 }
 
@@ -64,7 +64,7 @@ model Address {
   state      String?
   country    String?
   postalCode String?
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int  @unique 
 }
 
