@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateFullProfileDto } from 'src/profiles/dto/create-profile.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProfilesService } from 'src/profiles/profiles.service';
 
@@ -32,11 +33,11 @@ export class UsersService {
     });
 
     console.log(user);
-
-    // TODO ADD PROFILE
-    // TODO ADD SOCIALMEDIA LINKS
-    // TODO ADD ADDRESS FIELDS
-    // WITH EMPTY OR DEFAULT VALUES
+    const emptyProfileDto : CreateFullProfileDto = new CreateFullProfileDto()
+    
+    console.log(emptyProfileDto)
+    const profile = await this.profilesService.create(emptyProfileDto, user.id)
+    console.log(profile)
 
     return user
   }

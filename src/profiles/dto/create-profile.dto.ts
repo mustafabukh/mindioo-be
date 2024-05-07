@@ -27,6 +27,14 @@ export class AddressDto {
   @IsOptional()
   @IsString()
   postalCode?: string;
+
+  constructor() {
+    this.street = null
+    this.city = null
+    this.state = null
+    this.country = null
+    this.postalCode = null
+  }
 }
 
 export class SocialMediaDto {
@@ -49,6 +57,13 @@ export class SocialMediaDto {
   @IsOptional()
   @IsString()
   instagram?: string;
+
+  constructor() {
+    this.facebook = null
+    this.youtube = null
+    this.twitter = null
+    this.instagram = null
+  }
 }
 
 export class BasicProfileDto {
@@ -88,6 +103,17 @@ export class BasicProfileDto {
   @ApiProperty()
   @IsOptional()
   gender?: Gender; 
+
+  constructor() {
+    this.userId = null
+    this.firstName = null
+    this.lastName = 
+    this.bio = null
+    this.birthdate = null;
+    this.coverPhoto = null
+    this.profilePhoto = null
+    this.gender = null
+  }
 }
 
 export class CreateFullProfileDto {
@@ -102,4 +128,10 @@ export class CreateFullProfileDto {
   @ApiProperty()
   @IsOptional()
   socialMedia?: SocialMediaDto; // Links DTO 
+
+  constructor() {
+    this.basicProfileDto = new BasicProfileDto()
+    this.address = new AddressDto()
+    this.socialMedia = new SocialMediaDto()
+  }
 }

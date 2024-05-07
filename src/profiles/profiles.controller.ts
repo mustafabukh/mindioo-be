@@ -18,6 +18,7 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nest
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/role.guard';
+import { UsersFilter } from 'src/utils/filters';
 
 @Controller({
   version: versions.V1,
@@ -40,26 +41,43 @@ export class ProfilesController {
     return this.profilesService.create(profileDto,userId);
   }
 
-  // TODO Get vendors with filter and pagination
-  @Get()
+  // TODO Get with filter and pagination/// DONE 
+  // TODO Get with pagination
+  @Post('getAll')
+  // @UseGuards(RolesGuard)
+  // @Roles(UserType.ADMIN)
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
+  getAll(
+    @Body() usersFilter: UsersFilter,
+  ) {
+    return this.profilesService.findAllWithfilter(usersFilter);
+  }
+
+  @Get('getByID:userId')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  findAll() {
-    return this.profilesService.findAll();
+  getByID(
+    @Param('userId') id: string
+    ) {
+    return this.profilesService.findOne(+id);
   }
 
-  @Get(':userId')
+  @Get('getMyProfile')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN,UserType.VENDOR,UserType.CUSTOMER)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  findOne(@Param('userId') id: string) {
-    return this.profilesService.findOne(+id);
+  getMyProfile(
+    @Req() request: any
+    ) {
+      const userId = request.user.id;
+    return this.profilesService.findOne(userId);
   }
 
-  @Patch()
+  @Patch('updateProfile')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN,UserType.VENDOR,UserType.CUSTOMER)
   @UseGuards(JwtAuthGuard)

@@ -38,9 +38,9 @@ model Profile {
   userId       Int       @unique
   user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   gender       Gender?
-  firstName    String
-  lastName     String
-  bio          String
+  firstName    String?
+  lastName     String?
+  bio          String?
   birthdate    DateTime?
   address      Address?
   socialMedia  Links?
