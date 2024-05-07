@@ -41,13 +41,15 @@ export class ProfilesController {
     return this.profilesService.create(profileDto,userId);
   }
 
-  // TODO Get with filter and pagination/// DONE 
   // TODO Get with pagination
+  // TODO ADD STATISTICS
+  // UNIFY RESPONSES
+  // more error handling 
   @Post('getAll')
-  // @UseGuards(RolesGuard)
-  // @Roles(UserType.ADMIN)
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(UserType.ADMIN)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   getAll(
     @Body() usersFilter: UsersFilter,
   ) {

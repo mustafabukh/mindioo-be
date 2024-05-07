@@ -48,83 +48,32 @@ export class ProfilesService {
 
   async findAllWithfilter(filters : UsersFilter) {
      
-    
-
-    // let filterobj2 = new PrismaFilterObj() 
-    // filterobj2 = addWhere(filterobj2,{
-    //   OR: [
-    //     {
-    //       firstName:{
-    //         contains:""
-    //       } 
-    //     },
-    //     {
-    //       lastName:{
-    //         contains:""
-    //       } 
-    //     }
-    //   ]
-    // })
-    // console.log(filterobj2)
-
-
-    let filterObj =  {
-      where:{
-      },
-      include :{
-
-      }
-    }
-    
-    console.log(filterObj)
+    let prismaFilterObj = new PrismaFilterObj() 
     if(filters.name){
-      filterObj.where = {...filterObj.where, OR: [
-        {
-          firstName:{
-            contains:filters.name
-          } 
-        },
-        {
-          lastName:{
-            contains:filters.name
-          } 
-        }
-      ] }
+      prismaFilterObj = addWhereClause(prismaFilterObj,{
+        OR: [
+          {firstName:{contains:filters.name}},
+          {lastName:{contains:filters.name}}
+        ]
+      })
     }
-    if(filters.categories) {
-      filterObj.include = {
-        ...filterObj.include,
-        user: true,
-      }
-      filterObj.where = {...filterObj.where, user:{
-        categories: {
-          hasEvery:filters.categories
-        }
-      } }
+    if(filters.gender){
+      prismaFilterObj = addWhereClause(prismaFilterObj,{gender:filters.gender})
     }
-    if(filters.city || filters.state) {
-      filterObj.include = {
-        ...filterObj.include,
-        address: true,
-      }
-      if(filters.city) {
-        filterObj.where = {...filterObj.where, address:{
-          city:{
-            contains:filters.city
-          }
-        } }
-      }
-      if(filters.state) {
-        filterObj.where = {...filterObj.where, address:{
-          city:{
-            contains:filters.state
-          }
-        } }
-      }
+    if(filters.categories && filters.categories?.length != 0) {
+      prismaFilterObj = AddIncludeClause(prismaFilterObj,{user:true})
+      prismaFilterObj = addWhereClause(prismaFilterObj,{user:{categories:{hasEvery:filters.categories}}})
     }
-    console.log(filterObj)
+    if(filters.state) {
+      prismaFilterObj = AddIncludeClause(prismaFilterObj,{address:true})
+      prismaFilterObj = addWhereClause(prismaFilterObj,{address:{state:{contains:filters.state}}})
+    }
+    if(filters.city) {
+      prismaFilterObj = AddIncludeClause(prismaFilterObj,{address:true})
+      prismaFilterObj = addWhereClause(prismaFilterObj,{address:{city:{contains:filters.city}}})
+    }
 
-    return this.prisma.profile.findMany(filterObj);
+    return this.prisma.profile.findMany(prismaFilterObj);
   }
 
 

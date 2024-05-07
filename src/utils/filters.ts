@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserType, VendorCategory } from "@prisma/client";
+import { Gender, UserType, VendorCategory } from "@prisma/client";
 import {
   IsBoolean,
   IsNotEmpty,
@@ -18,6 +18,10 @@ export class UsersFilter {
   @IsOptional()
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsOptional()
+  gender: Gender;
 
   @ApiProperty()
   @IsOptional()
