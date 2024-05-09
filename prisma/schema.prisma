@@ -25,12 +25,15 @@ model User {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
+  postType    PostType @default(TEXT)
+  description String?
+  media       String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    Int
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
 }
 
 model Profile {
@@ -88,4 +91,11 @@ enum Gender {
   MALE
   FEMALE
   NONBINARY
+}
+
+enum PostType {
+  TEXT
+  VIDEO
+  IMAGE
+  AUDIO
 }
