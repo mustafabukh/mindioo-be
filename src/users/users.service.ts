@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateFullProfileDto } from 'src/profiles/dto/create-profile.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProfilesService } from 'src/profiles/profiles.service';
 
 import * as bcrypt from 'bcrypt';
+import { UserType } from '@prisma/client';
+import { genders, vendorCategories } from 'src/utils/mapEnums';
 export const roundsOfHashing = 8;
 
 @Injectable()
@@ -15,7 +18,7 @@ export class UsersService {
               ) {}
 
   
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, userType: UserType) {
     const hashedPassword = await bcrypt.hash(
     createUserDto.password,
     roundsOfHashing,
@@ -23,16 +26,18 @@ export class UsersService {
     
     createUserDto.password = hashedPassword;
 
+    createUserDto.userType = userType
+
     const user = await this.prisma.user.create({
     data: createUserDto,
     });
 
     console.log(user);
-
-    // TODO ADD PROFILE
-    // TODO ADD SOCIALMEDIA LINKS
-    // TODO ADD ADDRESS FIELDS
-    // WITH EMPTY OR DEFAULT VALUES
+    const emptyProfileDto : CreateFullProfileDto = new CreateFullProfileDto()
+    
+    console.log(emptyProfileDto)
+    const profile = await this.profilesService.create(emptyProfileDto, user.id)
+    console.log(profile)
 
     return user
   }
@@ -62,5 +67,13 @@ export class UsersService {
   remove(id: number) {
     this.prisma.profile.delete({ where: { id } });
     return this.prisma.user.delete({ where: { id } });
+  }
+
+  getGenders() {
+    return genders;
+  }
+
+  getCategories() {
+    return vendorCategories;
   }
 }

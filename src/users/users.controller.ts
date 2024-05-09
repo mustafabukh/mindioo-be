@@ -31,13 +31,19 @@ import { versions } from 'src/utils/versioning'
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('createCustomer')
   @ApiCreatedResponse({ type: UserEntity })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  createCustomer(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto, UserType.CUSTOMER);
   }
 
-  @Get()
+  @Post("createVendor")
+  @ApiCreatedResponse({ type: UserEntity })
+  createVendor(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto, UserType.VENDOR);
+  }
+
+  @Get('getAll')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN)
   @UseGuards(JwtAuthGuard)
@@ -46,7 +52,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('getById:id')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN)
   @UseGuards(JwtAuthGuard)
@@ -61,7 +67,7 @@ export class UsersController {
     return user;
   }
 
-  @Patch()
+  @Patch('update')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   update(
@@ -81,5 +87,15 @@ export class UsersController {
     ) {
     const userId = request.user.id;
     return this.usersService.remove(userId);
+  }
+
+  @Get('getCategories')
+  getCategories() {
+    return this.usersService.getCategories();
+  }
+
+  @Get('getGenders')
+  getGenders() {
+    return this.usersService.getGenders();
   }
 }
