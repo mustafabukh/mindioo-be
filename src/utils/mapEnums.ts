@@ -1,4 +1,4 @@
-import { Gender, VendorCategory } from "@prisma/client";
+import { Gender, PostType, VendorCategory } from "@prisma/client";
 
 
 export const vendorCategories = {
@@ -14,4 +14,11 @@ export const genders = {
   "Male":Gender.MALE,
   "Female":Gender.FEMALE,
   "Non-binary":Gender.NONBINARY,
+}
+
+export const postsType = {
+  "Audio":PostType.AUDIO,
+  "Video":PostType.VIDEO,
+  "Text":PostType.TEXT,
+  "Image":PostType.IMAGE,
 }

@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { postsType } from 'src/utils/mapEnums';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto, userId: number) {
-    return 'This action adds a new post';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createPostDto: CreatePostDto, userId: number) {
+
+    createPostDto.authorId = userId
+    const post = await this.prisma.post.create({
+      data:createPostDto,
+    });
+    console.log(post);
+    return post
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    return this.prisma.profile.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async getAllByUserId(id: number) {
+    return this.prisma.post.findMany({ where: { authorId:id } });
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async getOneById(id: number) {
+    return this.prisma.post.findUnique({ where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async update(userId: number, postId:number, updatePostDto: UpdatePostDto) {
+    const post = await this.prisma.post.update({
+      where: {id: postId, authorId:userId },
+      data: updatePostDto,
+    });
+    return post
+  }
+
+  async remove(userId: number, postId: number) {
+    console.log({id: postId, authorId:userId })
+
+    const post = await this.prisma.post.delete({
+      where: {id: postId, authorId:userId },
+    });
+    return post
+  }
+
+  getPostTypes() {
+    return postsType
   }
 }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { isDate,IsDateString,isDateString,IsOptional, IsString, MinLength } from 'class-validator';
-import { Gender, User } from '@prisma/client'; // Import UserType from Prisma
+import { Gender, PostType, User } from '@prisma/client'; // Import UserType from Prisma
 
 
 export class CreatePostDto {
@@ -16,7 +16,7 @@ export class CreatePostDto {
   media: string[];
 
   @ApiProperty({ required: false })
-  @IsOptional()
+
   @IsDateString()
   createdAt?: Date;
 
@@ -25,6 +25,14 @@ export class CreatePostDto {
   @IsDateString()
   updatedAt?: Date;
 
+  @ApiProperty()
+  authorId: number;
+
   @ApiProperty({ required: false })
-  authorId?: number;
+  postType:PostType
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  content:string
 }
